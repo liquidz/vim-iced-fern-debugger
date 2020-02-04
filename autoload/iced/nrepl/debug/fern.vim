@@ -56,9 +56,15 @@ function! iced#nrepl#debug#fern#last_bufnr() abort
 endfunction
 
 function! iced#nrepl#debug#fern#clear() abort
-	"if stridx(bufname('%'), 'fern://') == 0 | return | endif
-	call iced#highlight#clear()
   call iced#nrepl#debug#default#close_popup()
+
+  let current_bufnr = bufnr('%')
+  try
+    call iced#buffer#focus(s:last_bufnr)
+    call iced#highlight#clear()
+  finally
+    call iced#buffer#focus(current_bufnr)
+  endtry
 endfunction
 
 let &cpoptions = s:save_cpo

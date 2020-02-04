@@ -38,6 +38,7 @@ function! s:map_preview(helper) abort
     let debug_texts = iced#nrepl#debug#default#generate_debug_text(value)
     call iced#nrepl#debug#default#show_popup(debug_texts)
 
+    call iced#system#get('timer').start(1000, {_ -> iced#nrepl#debug#fern#clear()})
   finally
     call iced#buffer#focus(current_bufnr)
   endtry
