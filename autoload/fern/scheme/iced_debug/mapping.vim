@@ -1,12 +1,11 @@
 let s:save_cpo = &cpoptions
 set cpoptions&vim
 
-let s:Promise = vital#fern#import('Async.Promise')
+let s:timer_id = -1
 
 function! fern#scheme#iced_debug#mapping#init(disable_default_mappings) abort
   call fern#scheme#dict#mapping#init(a:disable_default_mappings)
 
-  "nnoremap <buffer><silent> <Plug>(fern-action-open:select) :<C-u>call <SID>call('preview')<CR>
   nnoremap <buffer><silent> <Plug>(fern-action-open:edit-or-error) :<C-u>call <SID>call('preview')<CR>
   nnoremap <buffer><silent> <Plug>(fern-action-enter)              :<C-u>call <SID>call('preview')<CR>
 endfunction
@@ -18,8 +17,19 @@ function! s:call(name, ...) abort
        \)
 endfunction
 
+function! s:clear() abort
+  let s:timer_id = -1
+  call iced#nrepl#debug#fern#clear()
+endfunction
+
 function! s:map_preview(helper) abort
   let node = a:helper.sync.get_cursor_node()
+  let timer = iced#system#get('timer')
+
+  if s:timer_id != -1
+    call timer.stop(s:timer_id)
+    call s:clear()
+  endif
 
   let value = node.concealed._value
   if type(value) != v:t_dict || !has_key(value, 'debug-value')
@@ -38,12 +48,12 @@ function! s:map_preview(helper) abort
     let debug_texts = iced#nrepl#debug#default#generate_debug_text(value)
     call iced#nrepl#debug#default#show_popup(debug_texts)
 
-    call iced#system#get('timer').start(1000, {_ -> iced#nrepl#debug#fern#clear()})
+    let s:timer_id = timer.start(1000, {_ -> s:clear()})
   finally
     call iced#buffer#focus(current_bufnr)
   endtry
 
-  return s:Promise.resolve()
+  return iced#promise#resolve('')
 endfunction
 
 let &cpoptions = s:save_cpo
