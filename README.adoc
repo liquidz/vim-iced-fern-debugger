@@ -14,7 +14,11 @@ vim-iced-fern-debugger provides two types of debugger.
 
 === #dbg reader literal
 
+image:asset/debug.png[]
+
 Execute `:IcedToggleFernDebugger` to toggle vim-iced's debugger.
+To launch debugger, please see the following document.
+https://liquidz.github.io/vim-iced/#debugging
 
 If you'd like to use vim-iced-fern-debugger always, please set `"fern"` to `g:iced#debug#debugger`.
 [source,vim]
@@ -23,6 +27,21 @@ let g:iced#debug#debugger = 'fern'
 ----
 
 === Tapped values
+
+image:asset/tapped.png[]
+
+This plugin provides following commands.
+
+|===
+|Command | Note
+
+| `:IcedBrowseTappedFern`
+| Browse all tapped values
+
+| `IcedBrowseLastTappedFern`
+| Browse the last tapped value
+
+|===
 
 == Requirements
 
