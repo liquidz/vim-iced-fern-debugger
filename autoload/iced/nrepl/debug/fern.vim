@@ -44,7 +44,7 @@ function! iced#nrepl#debug#fern#quit() abort
   let s:buf = []
   let s:last_bufnr = bufnr('%')
 
-  silent! execute ':Fern iced_debug:/// -drawer'
+  silent! execute printf(':Fern iced_debug:/// -drawer -width=%d', g:vim_iced_fern_drawer_width)
 endfunction
 
 function! iced#nrepl#debug#fern#result() abort
