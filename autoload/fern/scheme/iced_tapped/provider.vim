@@ -12,7 +12,10 @@ let s:provider = {
 function! s:provider._parse_path(path) abort dict
   let path = split(a:path, '/')
   let path = map(path, {_, v ->
-          \ (type(v) == v:t_string && match(v, '^\d\+$') == 0) ? str2nr(v) : self._decode(v)})
+        \ (type(v) == v:t_string && match(v, '^\d\+$') == 0) ? str2nr(v) : self._decode(v)})
+  " Add single quote for symbol
+  let path = map(path, {_, v ->
+        \ (type(v) == v:t_string && match(v, "^[^:']") == 0) ? printf("'%s", v) : v})
   return path
 endfunction
 
