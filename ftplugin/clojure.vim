@@ -38,3 +38,12 @@ endfunction
 command! IcedBrowseTappedFern call s:open_fern('')
 command! IcedBrowseLastTappedFern call s:open_fern('0')
 command! IcedToggleFernDebugger call s:toggle_debugger()
+
+if !exists('g:iced#palette')
+  let g:iced#palette = {}
+endif
+call extend(g:iced#palette, {
+      \ 'BrowseTappedFern': ':IcedBrowseTappedFern',
+      \ 'BrowseLastTappedFern': ':IcedBrowseLastTappedFern',
+      \ 'ToggleFernDebugger': ':IcedToggleFernDebugger',
+      \ })
