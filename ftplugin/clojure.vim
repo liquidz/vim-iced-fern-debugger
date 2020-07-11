@@ -8,8 +8,8 @@ if empty(globpath(&rtp, 'autoload/fern.vim'))
 endif
 
 if !exists('g:vim_iced_version')
-      \ || g:vim_iced_version < 1402
-  echoe 'iced-fern-debugger requires vim-iced v0.14.2 or later.'
+      \ || g:vim_iced_version < 20101
+  echoe 'iced-fern-debugger requires vim-iced v2.1.1 or later.'
   finish
 endif
 
