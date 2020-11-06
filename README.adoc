@@ -43,9 +43,19 @@ This plugin provides following commands.
 
 |===
 
+And also provides following mappings.
+
+|===
+|Mapping | Note
+
+| `d`
+| Delete the tapped value under the cursor.
+
+|===
+
 == Requirements
 
-* https://github.com/liquidz/vim-iced[vim-iced] (`2.1.1` or later)
+* https://github.com/liquidz/vim-iced[vim-iced] (`2.5.0` or later)
 * https://github.com/lambdalisue/fern.vim[fern.vim]
 
 == Installation
