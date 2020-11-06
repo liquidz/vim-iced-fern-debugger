@@ -14,8 +14,8 @@ function! s:provider._parse_path(path) abort dict
   let path = map(path, {_, v ->
         \ (type(v) == v:t_string && match(v, '^\d\+$') == 0) ? str2nr(v) : self._decode(v)})
   " Add single quote for symbol
-  let path = map(path, {_, v ->
-        \ (type(v) == v:t_string && match(v, "^[^:']") == 0) ? printf("'%s", v) : v})
+  let path = map(path, {i, v ->
+        \ (i != 0 && type(v) == v:t_string && match(v, "^[^:']") == 0) ? printf("'%s", v) : v})
   return path
 endfunction
 
@@ -42,7 +42,9 @@ function! s:provider.get_children(node, ...) abort dict
     if empty(keys)
       return iced#promise#call('iced#nrepl#op#iced#list_tapped', [])
             \.then({resp -> has_key(resp, 'error') ? iced#promise#reject(resp['error']) : resp})
-            \.then({resp -> map(get(resp, 'tapped', []), {i, v -> self._node(self, [i], i, {'name': v, 'has-children?': 'true'}, a:node)})})
+            \.then({resp -> map(get(resp, 'tapped', []), {_, v ->
+            \                   self._node(self, [get(v, 'unique-id')], get(v, 'unique-id'), {'name': get(v, 'value', ''), 'has-children?': 'true'}, a:node)
+            \               })})
     else
       return iced#promise#call('iced#nrepl#op#iced#fetch_tapped_children', [keys])
             \.then({resp -> has_key(resp, 'error') ? iced#promise#reject(resp['error']) : resp})
