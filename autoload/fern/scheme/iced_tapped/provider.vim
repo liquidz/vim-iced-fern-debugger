@@ -42,13 +42,13 @@ function! s:provider.get_children(node, ...) abort dict
     if empty(keys)
       return iced#promise#call('iced#nrepl#op#iced#list_tapped', [])
             \.then({resp -> has_key(resp, 'error') ? iced#promise#reject(resp['error']) : resp})
-            \.then({resp -> map(get(resp, 'tapped', []), {_, v ->
+            \.then({resp -> map(copy(get(resp, 'tapped', [])), {_, v ->
             \                   self._node(self, [get(v, 'unique-id')], get(v, 'unique-id'), {'name': get(v, 'value', ''), 'has-children?': 'true'}, a:node)
             \               })})
     else
       return iced#promise#call('iced#nrepl#op#iced#fetch_tapped_children', [keys])
             \.then({resp -> has_key(resp, 'error') ? iced#promise#reject(resp['error']) : resp})
-            \.then({resp -> map(get(resp, 'children', []), {_, v -> self._node(self, keys + [v.name], v.name, v, a:node)})})
+            \.then({resp -> map(copy(get(resp, 'children', [])), {_, v -> self._node(self, keys + [v.name], v.name, v, a:node)})})
     endif
   catch
     return iced#promise#reject(v:exception)
